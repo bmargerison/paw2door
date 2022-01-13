@@ -20,7 +20,10 @@ from django.conf.urls.static import static
 from rest_framework import routers, views
 from core import views
 from core.views import front
-from rest_framework_jwt.views import obtain_jwt_token
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 
 router = routers.DefaultRouter()
 router.register(r'shelter', views.ShelterView, 'shelter')
@@ -30,7 +33,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
     path("", front, name="front"),
-    path('token-auth/', obtain_jwt_token),
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
 
 #path('api/', include('core.urls')),
