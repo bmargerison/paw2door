@@ -1,3 +1,5 @@
+import json
+
 from django.http import request
 from django.shortcuts import render
 from rest_framework.response import Response
@@ -5,8 +7,11 @@ from django.db.models.query import QuerySet
 from rest_framework import status, viewsets
 from .serializers import ShelterSerializer, PetSerializer
 from .models import Shelter, Pet
-#from rest_framework.parsers import MultiPartParser, FormParser
-#from rest_framework.views import APIView
+from django.contrib.auth import authenticate, login, logout
+from django.http import JsonResponse
+from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.decorators.http import require_POST
+
 
 # Create your views here.
 def front(request):
@@ -21,38 +26,42 @@ class PetView(viewsets.ModelViewSet):
     serializer_class = PetSerializer
     queryset = Pet.objects.all()
 
-"""
-class ShelterView(APIView):
-    parser_classes = (MultiPartParser, FormParser)
+@require_POST
+def login_view(request):
+    data = json.loads(request.body)
+    email = data.get('email')
+    password = data.get('password')
 
-    def get(self, request):
-        shelter = Shelter.objects.all()
-        serializer = ShelterSerializer(shelter, many=True)
-        return Response(serializer.data)
+    if email is None or password is None:
+        return JsonResponse({'detail': 'Please provide email and password.'}, status=400)
 
-    def post(self, request):
-        serializer = ShelterSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else: 
-            print('error', serializer.errors)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    user = authenticate(email=email, password=password)
 
-class PetView(APIView):
-    parser_classes = (MultiPartParser, FormParser)
+    if user is None:
+        return JsonResponse({'detail': 'Invalid credentials.'}, status=400)
 
-    def get(self, request):
-        pet = Pet.objects.all()
-        serializer = PetSerializer(pet, many=True)
-        return Response(serializer.data)
+    login(request, user)
+    return JsonResponse({'detail': 'Successfully logged in.'})
 
-    def post(self, request):
-        serializer = PetSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            print('error', serializer.errors)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-"""
+
+def logout_view(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({'detail': 'You\'re not logged in.'}, status=400)
+
+    logout(request)
+    return JsonResponse({'detail': 'Successfully logged out.'})
+
+
+@ensure_csrf_cookie
+def session_view(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({'isAuthenticated': False})
+
+    return JsonResponse({'isAuthenticated': True})
+
+
+def whoami_view(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({'isAuthenticated': False})
+
+    return JsonResponse({'email': request.user.email})

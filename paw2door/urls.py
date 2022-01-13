@@ -20,15 +20,21 @@ from django.conf.urls.static import static
 from rest_framework import routers, views
 from core import views
 from core.views import front
+from django.shortcuts import render
 
 router = routers.DefaultRouter()
 router.register(r'shelter', views.ShelterView, 'shelter')
 router.register(r'pet', views.PetView, 'pet')
 
+# def index_view(request):
+#     return render(request, 'build/index.html')
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
+    path('api/', include('core.urls')),
     path("", front, name="front"),
+    # path('', index_view, name='index'),
 ]
 
 #path('api/', include('core.urls')),
