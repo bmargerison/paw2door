@@ -1,6 +1,6 @@
 
 from django.shortcuts import render
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.response import Response
 from rest_framework import status, permissions
 from .serializers import ShelterSerializer, PetSerializer
@@ -8,6 +8,8 @@ from .models import Shelter, Pet
 from .serializers import MyTokenObtainPairSerializer, CustomUserSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.views import APIView
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 
 # Create your views here.
@@ -31,6 +33,8 @@ def shelter(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET', 'POST'])
+@authentication_classes([])
+@permission_classes([])
 def pet(request):
 
     if request.method == 'GET':
@@ -50,6 +54,7 @@ class ObtainTokenPairWithDetailsView(TokenObtainPairView):
 
 class CustomUserCreate(APIView):
     permission_classes = (permissions.AllowAny,)
+    authentication_classes = ()
 
     def post(self, request, format='json'):
         serializer = CustomUserSerializer(data=request.data)

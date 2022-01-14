@@ -23,8 +23,8 @@ class Signup extends Component{
       event.preventDefault();
       try {
           const response = await axiosInstance.post('/user/create/', {
-              username: this.state.username,
-              email: this.state.email,
+              username: this.state.email,
+              name: this.state.username,
               password: this.state.password
           });
           return response;

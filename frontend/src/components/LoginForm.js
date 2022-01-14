@@ -20,8 +20,7 @@ class Login extends Component {
     try {
         const response = await axiosInstance.post('/token/obtain/', {
             password: this.state.password,
-            email: this.state.email,
-            username: "sigita"
+            username: this.state.email
         });
         axiosInstance.defaults.headers['Authorization'] = "JWT " + response.data.access;
         localStorage.setItem('access_token', response.data.access);
