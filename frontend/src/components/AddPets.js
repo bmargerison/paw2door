@@ -61,7 +61,7 @@ export default class AddPets extends Component {
           console.log(res.data);
         })
         .catch(err => console.log(err))
-    window.location.reload()
+
   };
 
   render() {

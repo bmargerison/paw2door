@@ -17,7 +17,7 @@ class Shelter(models.Model):
         return self.name
 
 class Pet(models.Model):
-    shelter = models.ForeignKey(Shelter, on_delete=models.CASCADE)
+    shelter = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     name = models.CharField(max_length=20)
     image = models.ImageField(blank=True, null=True)
     
