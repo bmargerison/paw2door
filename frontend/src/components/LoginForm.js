@@ -1,41 +1,54 @@
-import React, { useEffect, useState } from "react";
-import Cookies from "universal-cookie";
 import '../App.css';
+import React, { Component } from "react";
+import axiosInstance from "../axiosApi";
 
-const LoginForm = () => {
+class Login extends Component {
+  constructor(props) {
+      super(props);
+      this.state = {email: "", password: ""};
 
-  const cookies = new Cookies();
-
-  const login = () => {
-    const url = "http://localhost:8000/api/pet/";
-
-    fetch("/api/login/", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRFToken": cookies.get("csrftoken"),
-        },
-        credentials: "same-origin",
-        body: JSON.stringify({email: 'shelter@mail.com', password: 'password'}),
-      })
-      .then(this.isResponseOk)
-      .then((data) => {
-        console.log(data);
-        this.setState({isAuthenticated: true, username: "", password: "", error: ""});
-      })
-      .catch((err) => {
-        console.log(err);
-        this.setState({error: "Wrong username or password."});
-      });
+      this.handleChange = this.handleChange.bind(this);
+      this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  login()
+  handleChange(event) {
+      this.setState({[event.target.name]: event.target.value});
+  }
 
-  return (
-    <div className='login'>
+  async handleSubmit(event) {
+    event.preventDefault();
+    try {
+        const response = await axiosInstance.post('/token/obtain/', {
+            password: this.state.password,
+            email: this.state.email,
+            username: "sigita"
+        });
+        axiosInstance.defaults.headers['Authorization'] = "JWT " + response.data.access;
+        localStorage.setItem('access_token', response.data.access);
+        localStorage.setItem('refresh_token', response.data.refresh);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
 
-    </div>
-  )
-};
-
-export default LoginForm;
+  render() {
+      return (
+          <div>
+              Login
+              <form onSubmit={this.handleSubmit}>
+                  <label>
+                      email:
+                      <input name="email" type="text" value={this.state.email} onChange={this.handleChange}/>
+                  </label>
+                  <label>
+                      Password:
+                      <input name="password" type="password" value={this.state.password} onChange={this.handleChange}/>
+                  </label>
+                  <input type="submit" value="Submit"/>
+              </form>
+          </div>
+      )
+  }
+}
+export default Login;
