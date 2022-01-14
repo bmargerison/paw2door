@@ -1,58 +1,42 @@
-from django.http import request
+
 from django.shortcuts import render
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from django.db.models.query import QuerySet
-from rest_framework import status, viewsets
+from rest_framework import status
 from .serializers import ShelterSerializer, PetSerializer
 from .models import Shelter, Pet
-#from rest_framework.parsers import MultiPartParser, FormParser
-#from rest_framework.views import APIView
 
 # Create your views here.
 def front(request):
     context = { }
     return render(request, "index.html", context)
 
-class ShelterView(viewsets.ModelViewSet):
-    serializer_class = ShelterSerializer
-    queryset = Shelter.objects.all()
+@api_view(['GET', 'POST'])
+def shelter(request):
 
-class PetView(viewsets.ModelViewSet):
-    serializer_class = PetSerializer
-    queryset = Pet.objects.all()
-
-"""
-class ShelterView(APIView):
-    parser_classes = (MultiPartParser, FormParser)
-
-    def get(self, request):
+    if request.method == 'GET':
         shelter = Shelter.objects.all()
         serializer = ShelterSerializer(shelter, many=True)
         return Response(serializer.data)
 
-    def post(self, request):
+    elif request.method == 'POST':
         serializer = ShelterSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else: 
-            print('error', serializer.errors)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class PetView(APIView):
-    parser_classes = (MultiPartParser, FormParser)
+@api_view(['GET', 'POST'])
+def pet(request):
 
-    def get(self, request):
+    if request.method == 'GET':
         pet = Pet.objects.all()
         serializer = PetSerializer(pet, many=True)
         return Response(serializer.data)
 
-    def post(self, request):
+    elif request.method == 'POST':
         serializer = PetSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            print('error', serializer.errors)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-"""
+            return Response(status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

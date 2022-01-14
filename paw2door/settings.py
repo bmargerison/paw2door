@@ -140,3 +140,7 @@ MEDIA_URL = '/images/'
 CORS_ORIGIN_WHITELIST = [
      'http://localhost:3000'
 ]
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+ALLOWED_HOSTS = ['*']
