@@ -191,3 +191,7 @@ MEDIA_URL = '/images/'
 CORS_ORIGIN_WHITELIST = [
      'http://localhost:3000'
 ]
+
+SPATIALITE_LIBRARY_PATH='/usr/local/lib/mod_spatialite.dylib'
+GDAL_LIBRARY_PATH = '/opt/homebrew/opt/gdal/lib/libgdal.dylib'
+GEOS_LIBRARY_PATH = '/opt/homebrew/opt/geos/lib/libgeos_c.dylib'
