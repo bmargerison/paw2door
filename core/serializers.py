@@ -7,12 +7,12 @@ Shelter = get_user_model()
 class ShelterCreateSerializer(UserCreateSerializer):
     class Meta(UserCreateSerializer.Meta):
         model = Shelter
-        fields = ('id', 'email', 'name', 'phone_number', 'password')
+        fields = ('id', 'email', 'name', 'phone_number', 'password', 'location', 'address', 'city')
 
 class ShelterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Shelter
-        fields = '__all__'
+        fields = ('id', 'email', 'name', 'phone_number', 'password', 'location', 'address', 'city')
 
 class PetSerializer(serializers.ModelSerializer):
     class Meta:
