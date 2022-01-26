@@ -2,7 +2,13 @@
   The goal of this project was to create an aggregator for pet rescues to make it easier for people to adopt a pet.  
   This project was done as part of the Makers Academy final engineering project.
 
-## User Stories
+### How to run
+
+```
+python3 manage.py runserver
+```
+
+### User Stories
 
 The user stories we followed when creating the project.
 
@@ -33,7 +39,8 @@ So that I can have control over my shelter
 
 ```
 
-## Technologies 
+### Technologies 
+
 This application was built using a tech stack of:
  - SQLite
  - Django
@@ -46,22 +53,21 @@ Django was chosen because the team wanted to learn python and we found Django to
 
 React was chosen because we wanted a JS frontend which allowed for asynchronou functions so that our application could be a dynamic SPA. 
 
-## How to run
- 
-```
-create a parent directory for this project: mkdir <directoryname>
-cd into your created directory: cd <directoryname>
-run to create the virtual enviorment: pip install virtualenv
-run to activate the environment: source venv/bin/activate
-git clone this project: git clone https://github.com/adam3sUK/paw2door.git 
-cd into paw2door
-run: pip install -r requirements.txt
-run: python manage.py runserver
-  open [http://localhost:8000](http://localhost:8000)
-in another terminal window: 
-cd into frontend folder 
-run: npm -i
-run: npm start
-  the frontend will open on [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Reflections
 
-```
+Using a new tech stack for the whole team was definitely a challenge, and a tech stack that I would describe as not the most beginner friendly. In some instances the team took the appraoch to getting a feature deployed as quickly as possible, even if later it could cause issues to build upon. 
+
+The most significant issue was with login and token authentication. The team decided to split into 2 groups to try and come up with a solution, and then come together a couple of days later to choose the solution to go forward with. This is a credit to the team; we were adaptable and open to different ways of working, and also able to choose and discuss issues based on their merits to decide on a course of action.
+
+From a personal perspective I also made great progress in my understanding of how React works, which is evidenced by the 'ShowPets.js' React hook. Having in the past used what I would describe as 'non React ways of doing things', getting user input in the correct way this opened a lot of doors and allowed me to iterate and build on top of this Hook.
+
+### Improvements
+
+* The main selling point of the app is the ability to locate pets close to the user. Our initial preference was to have a map with pins for each shelter, but after research we decided with our time frame this would not be possible.
+* Providing the ability for someone looking to adopt to create an account would open the door to a lot of features, such as commenting, messaging etc.
+* The pets could be further filtered, for example indoor/outdoor cats, certain medical conditions, gender etc.
+
+### Known bugs and issues
+
+* There is an inconsistent bug where after you have just logged in the filepath to the 'My Shelter' page won't be completed with the correct number, or directs to '/shelter/null'. I believe this is due to our quick fixes to the login solution resulting from erroneous component trees.
+* When creating an account there is validation on the password field to ensure the password is unique enough, and that the email is unique. There are however no user prompts to inform that the account creation was not successful if they do not satisfy the criteria.
