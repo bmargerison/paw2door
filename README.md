@@ -4,9 +4,16 @@
 
 ### How to run
 
+Run the backend (from root directory):
 ```
 pip install -r requirements.txt
 python3 manage.py runserver
+```
+
+Run the frontend (from paw2door/frontend):
+```
+npm i
+npm start
 ```
 
 ### User Stories
